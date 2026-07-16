@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+
+# build
+dist
+dist-ssr
+
+# env
+.env
+.env.local
+.env.*.local
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# logs
+*.log
+npm-debug.log*
+
+# cache
+.vite
+.eslintcache
