@@ -43,8 +43,9 @@ export default function VideoGenerationPage() {
       setSession(data);
       setStatus('created');
       return data.slug;
-    } catch {
-      message.error('Error al crear sesión');
+    } catch (err) {
+      const detail = err?.data?.detail || err?.message || 'Error desconocido';
+      message.error(`Error al crear sesión: ${detail}`);
       return null;
     }
   }, [message]);
@@ -53,8 +54,9 @@ export default function VideoGenerationPage() {
     for (const f of files) {
       try {
         await uploadFile(slug, f);
-      } catch {
-        message.error(`Error al subir ${f.name}`);
+      } catch (err) {
+        const detail = err?.data?.detail || err?.message || 'Error desconocido';
+        message.error(`Error al subir ${f.name}: ${detail}`);
         return false;
       }
     }
@@ -82,9 +84,10 @@ export default function VideoGenerationPage() {
           message.error('La generación falló');
         }
       });
-    } catch {
+    } catch (err) {
       setStatus('failed');
-      message.error('Error al iniciar generación');
+      const detail = err?.data?.detail || err?.message || 'Error desconocido';
+      message.error(`Error al iniciar generación: ${detail}`);
     }
   }, [addVideo, form, message]);
 
