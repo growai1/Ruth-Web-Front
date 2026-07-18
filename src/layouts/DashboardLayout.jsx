@@ -1,20 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Layout, Menu, Button, Avatar, Dropdown, Typography, Space } from 'antd';
+import { Layout, Menu, Button, Typography, Space } from 'antd';
 import {
   VideoCameraOutlined,
   PlaySquareOutlined,
-  UserOutlined,
   BookOutlined,
   ThunderboltOutlined,
   MessageOutlined,
-  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SunOutlined,
   MoonOutlined,
 } from '@ant-design/icons';
-import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
 const { Sider, Header, Content } = Layout;
@@ -26,27 +23,14 @@ const menuItems = [
   { key: '/dashboard/courses', icon: <BookOutlined />, label: 'Cursos' },
   { key: '/dashboard/features', icon: <ThunderboltOutlined />, label: 'Características' },
   { key: '/dashboard/testimonials', icon: <MessageOutlined />, label: 'Testimonios' },
-  { key: '/dashboard/profile', icon: <UserOutlined />, label: 'Perfil' },
 ];
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
-  const { user, logout } = useAuth();
   const { mode, toggleTheme, tokens } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const { colors, shadows, radii } = tokens;
-
-  const handleLogout = useCallback(() => {
-    logout();
-    navigate('/');
-  }, [logout, navigate]);
-
-  const userMenuItems = [
-    { key: 'profile', icon: <UserOutlined />, label: 'Mi Perfil', onClick: () => navigate('/dashboard/profile') },
-    { type: 'divider' },
-    { key: 'logout', icon: <LogoutOutlined />, label: 'Cerrar Sesión', danger: true, onClick: handleLogout },
-  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -145,24 +129,6 @@ export default function DashboardLayout() {
                 </Text>
               )}
             </Button>
-
-            <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" arrow>
-              <Space style={{ cursor: 'pointer' }}>
-                <Avatar
-                  src={user?.avatar}
-                  icon={<UserOutlined />}
-                  style={{
-                    backgroundColor: colors.primary,
-                    color: '#fff',
-                    width: 40,
-                    height: 40,
-                    boxShadow: `${shadows.clayButton}, ${shadows.glow}`,
-                    border: `3px solid ${colors.bgSurface}`,
-                  }}
-                />
-                {!collapsed && <Text strong style={{ color: colors.text }}>{user?.name}</Text>}
-              </Space>
-            </Dropdown>
           </Space>
         </Header>
 

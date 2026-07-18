@@ -1,4 +1,4 @@
-const BASE_URL = '/api/ruth';
+export const API_BASE = (import.meta.env.VITE_API_URL || '') + '/api/ruth';
 
 async function request(url, options = {}) {
   const res = await fetch(url, options);

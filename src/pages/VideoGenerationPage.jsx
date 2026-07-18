@@ -1,9 +1,8 @@
 import { useState, useCallback, useRef } from 'react';
-import { Form, Input, Select, Typography, Space, Tag, App, Row, Col, List, Upload } from 'antd';
+import { Form, Input, Typography, Space, Tag, App, Row, Col, List, Upload } from 'antd';
 import { VideoCameraOutlined, ClearOutlined, DownloadOutlined, ShareAltOutlined, PlayCircleOutlined, InboxOutlined, CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVideos } from '../context/VideoContext';
-import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { GlowCard } from '../components/GlowCard';
 import { NeonButton } from '../components/NeonButton';
@@ -28,7 +27,6 @@ export default function VideoGenerationPage() {
   const { tokens } = useTheme();
   const { colors, shadows, radii } = tokens;
   const { addVideo, getRecentVideos } = useVideos();
-  const { user: _user } = useAuth();
   const { message } = App.useApp();
   const pollRef = useRef(null);
 
@@ -76,9 +74,6 @@ export default function VideoGenerationPage() {
           addVideo({
             title: form.getFieldValue('topic').substring(0, 50),
             topic: form.getFieldValue('topic'),
-            style: form.getFieldValue('style'),
-            duration: form.getFieldValue('duration'),
-            language: form.getFieldValue('language'),
             slug: data.slug,
           });
           message.success('Video generado exitosamente');
@@ -123,7 +118,7 @@ export default function VideoGenerationPage() {
 
   const handleShare = useCallback(() => {
     if (session?.slug) {
-      navigator.clipboard?.writeText(`${window.location.origin}/api/ruth/session/${session.slug}/video`);
+      navigator.clipboard?.writeText(getVideoUrl(session.slug));
       message.success('Enlace copiado al portapapeles');
     }
   }, [session, message]);
@@ -148,7 +143,7 @@ export default function VideoGenerationPage() {
               form={form}
               layout="vertical"
               onFinish={handleGenerate}
-              initialValues={{ style: 'Divulgativo', duration: 'Medio', language: 'es' }}
+              initialValues={{}}
               disabled={isProcessing}
             >
               <Form.Item label={<Text strong style={{ color: colors.text }}>Subir archivos (opcional)</Text>}>
@@ -197,35 +192,6 @@ export default function VideoGenerationPage() {
                   }}
                 />
               </Form.Item>
-
-              <Row gutter={16}>
-                <Col xs={24} sm={8}>
-                  <Form.Item name="style" label={<Text strong style={{ color: colors.text }}>Estilo</Text>} rules={[{ required: true }]}>
-                    <Select options={[
-                      { value: 'Formal', label: 'Formal' },
-                      { value: 'Divulgativo', label: 'Divulgativo' },
-                      { value: 'Animado', label: 'Animado' },
-                    ]} />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={8}>
-                  <Form.Item name="duration" label={<Text strong style={{ color: colors.text }}>Duración</Text>} rules={[{ required: true }]}>
-                    <Select options={[
-                      { value: 'Corto', label: 'Corto (~2 min)' },
-                      { value: 'Medio', label: 'Medio (~5 min)' },
-                      { value: 'Largo', label: 'Largo (~10 min)' },
-                    ]} />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={8}>
-                  <Form.Item name="language" label={<Text strong style={{ color: colors.text }}>Idioma</Text>} rules={[{ required: true }]}>
-                    <Select options={[
-                      { value: 'es', label: 'Español' },
-                      { value: 'en', label: 'Inglés' },
-                    ]} />
-                  </Form.Item>
-                </Col>
-              </Row>
 
               <Space size={16}>
                 <NeonButton

@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { GlowCard } from '../components/GlowCard';
 import { NeonButton } from '../components/NeonButton';
 import { PlantEmpty } from '../components/PlantEmpty';
+import { getVideoUrl } from '../utils/ruthApi';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -224,7 +225,7 @@ export default function VideoLibraryPage() {
           <div>
             {selectedVideo.slug ? (
               <video
-                src={`/api/ruth/session/${selectedVideo.slug}/video`}
+                src={getVideoUrl(selectedVideo.slug)}
                 controls
                 style={{ width: '100%', aspectRatio: '16/9', borderRadius: radii.lg, marginBottom: 24 }}
               />
@@ -266,7 +267,7 @@ export default function VideoLibraryPage() {
 
             <Space style={{ marginTop: 24 }}>
               {selectedVideo.slug && (
-                <NeonButton variant="ghost" icon={<DownloadOutlined />} onClick={() => window.open(`/api/ruth/session/${selectedVideo.slug}/video`, '_blank')}>
+                <NeonButton variant="ghost" icon={<DownloadOutlined />} onClick={() => window.open(getVideoUrl(selectedVideo.slug), '_blank')}>
                   Descargar
                 </NeonButton>
               )}
