@@ -17,7 +17,6 @@ import {
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
 import { Fireflies } from '../components/Fireflies';
 import { GlowCard } from '../components/GlowCard';
 import { NeonButton } from '../components/NeonButton';
@@ -97,7 +96,6 @@ function StatCounter({ value, suffix, label, colors }) {
 export default function LandingPage() {
   const { mode, toggleTheme, tokens } = useTheme();
   const { colors, shadows, radii } = tokens;
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -173,14 +171,7 @@ export default function LandingPage() {
             >
               {mode === 'dark' ? <SunOutlined /> : <MoonOutlined />}
             </button>
-            {user ? (
-              <NeonButton onClick={() => navigate('/dashboard')}>Dashboard</NeonButton>
-            ) : (
-              <Row gutter={12}>
-                <Col><NeonButton variant="ghost" onClick={() => navigate('/login')}>Acceder</NeonButton></Col>
-                <Col><NeonButton onClick={() => navigate('/register')}>Registrarse</NeonButton></Col>
-              </Row>
-            )}
+            <NeonButton onClick={() => navigate('/dashboard')}>Probar ahora</NeonButton>
           </nav>
 
           <button
@@ -213,14 +204,7 @@ export default function LandingPage() {
             <button onClick={toggleTheme} style={{ color: colors.primary, textAlign: 'left', padding: '8px 0' }}>
               {mode === 'dark' ? 'Modo Sol' : 'Modo Bosque'}
             </button>
-            {user ? (
-              <NeonButton onClick={() => { setMenuOpen(false); navigate('/dashboard'); }}>Dashboard</NeonButton>
-            ) : (
-              <Row gutter={12}>
-                <Col><NeonButton variant="ghost" onClick={() => { setMenuOpen(false); navigate('/login'); }}>Acceder</NeonButton></Col>
-                <Col><NeonButton onClick={() => { setMenuOpen(false); navigate('/register'); }}>Registrarse</NeonButton></Col>
-              </Row>
-            )}
+            <NeonButton onClick={() => { setMenuOpen(false); navigate('/dashboard'); }}>Probar ahora</NeonButton>
           </motion.div>
         )}
       </AnimatePresence>
@@ -265,7 +249,7 @@ export default function LandingPage() {
           <Row gutter={24} justify="center" style={{ flexWrap: 'wrap' }}>
             <Col>
               <NeonButton size="large" icon={<PlayCircleOutlined />}
-                onClick={() => navigate(user ? '/dashboard/generate' : '/register')}
+                onClick={() => navigate('/dashboard/generate')}
                 style={{ height: 60, paddingInline: 40, fontSize: 18 }}
               >
                 Comenzar ahora
@@ -339,7 +323,7 @@ export default function LandingPage() {
                         <Text style={{ fontSize: 13, color: colors.textTertiary }}>•</Text>
                         <Text style={{ fontSize: 13, color: colors.primary }}>{c.rating} ★</Text>
                       </div>
-                      <NeonButton variant="ghost" block onClick={() => navigate(user ? '/dashboard/courses' : '/register')} style={{ fontSize: 14 }}>
+                      <NeonButton variant="ghost" block onClick={() => navigate('/dashboard/courses')} style={{ fontSize: 14 }}>
                         Ver curso <ArrowRightOutlined />
                       </NeonButton>
                     </div>
@@ -435,7 +419,7 @@ export default function LandingPage() {
                 <a href="#features" style={{ color: colors.textSecondary }}>Características</a>
                 <a href="#courses" style={{ color: colors.textSecondary }}>Cursos</a>
                 <a href="#testimonials" style={{ color: colors.textSecondary }}>Testimonios</a>
-                <Link to="/login" style={{ color: colors.textSecondary }}>Acceder</Link>
+                <Link to="/dashboard" style={{ color: colors.textSecondary }}>Probar ahora</Link>
               </div>
             </Col>
             <Col xs={24} md={8}>
